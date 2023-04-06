@@ -42,6 +42,19 @@ def run_discord_bot():
             else:
                 await channel.send(f"``{manga.upper()} is already in the mangalist!``")
 
+        # Deletes new manga to mangalist
+        elif message.content.startswith("!delete"):
+            split = message.content.split(' ', 1)
+            if len(split) <= 1:
+                await channel.send("``Manga title must be submitted when using this command!``")
+                return
+            manga = split[1]
+            deleted = reddit.mangalist.delete_manga(manga)
+            if deleted:
+                await channel.send(f"``{manga.upper()} has been successfully deleted from the mangalist!``")
+            else:
+                await channel.send(f"``{manga.upper()} is already not in mangalist!``")
+
         # Display help message
         elif message.content.startswith("!help"):
             await channel.send(
