@@ -1,6 +1,6 @@
 """Implements all functions related to reddit"""
 
-import praw
+import asyncpraw
 import config
 import mangalist
 
@@ -29,7 +29,7 @@ def valid_title(title):
 # Searches through all new posts in the subreddit
 async def search_subreddit(channel):
     # Get reddit instance
-    reddit = praw.Reddit(
+    reddit = asyncpraw.Reddit(
         client_id=config.REDDIT_CLIENT_ID,
         client_secret=config.REDDIT_CLIENT_SECRET,
         user_agent="MangaBot",
@@ -39,8 +39,8 @@ async def search_subreddit(channel):
 
     print("running")
     
-    subreddit = reddit.subreddit(SUBREDDIT)
-    for submission in subreddit.stream.submissions(skip_existing=True):
+    subreddit = await reddit.subreddit(SUBREDDIT)
+    async for submission in subreddit.stream.submissions(skip_existing=True):
         # Check if post title is in manga list
         if valid_title(submission.title):
             # Post link in discord
