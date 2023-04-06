@@ -38,7 +38,7 @@ async def search_subreddit(channel):
         password="",
     )
 
-    print("running")
+    print("running\n")
 
     # Load list of mangas
     mangalist.load_manga()
@@ -52,7 +52,7 @@ async def search_subreddit(channel):
                 # Check if post title is in manga list
                 if valid_title(submission.title):
                     # Post link in discord
-                    print("Sending")
+                    print("Sending\n")
                     await channel.send("https://www.reddit.com" + submission.permalink)
         except asyncprawcore.AsyncPrawcoreException:
             time.sleep(10)
