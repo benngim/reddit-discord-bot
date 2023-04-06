@@ -44,3 +44,12 @@ def delete_manga(manga):
     else:
         print(f"{manga_title} is already not in mangalist!")
         return 0
+
+def get_mangalist():
+    mangalist = ""
+
+    with open('mangalist', 'r') as file:
+        for line in file:
+            mangalist += line
+
+    return mangalist

@@ -58,8 +58,16 @@ def run_discord_bot():
         # Display help message
         elif message.content.startswith("!help"):
             await channel.send(
-                "``` COMMANDS:\n !add [Manga] - Adds manga to bot's mangalist\n !delete [Manga] - Deletes manga from bot's mangalist\n !help - Displays usage for bot commands```"
+                "```COMMANDS:\n" 
+                + "!add [Manga] - Adds manga to bot's mangalist\n"
+                + "!delete [Manga] - Deletes manga from bot's mangalist\n"
+                + "!help - Displays usage for bot commands\n"
+                + "!mangalist - Displays all manga in bot's mangalist```"
                 )
+
+        # Display mangas in mangalist
+        elif message.content.startswith("!mangalist"):
+            await channel.send(f"```MANGALIST:\n{reddit.mangalist.get_mangalist()}```")
 
         # Command not found
         else:
@@ -68,11 +76,7 @@ def run_discord_bot():
 
     client.run(config.DISCORD_TOKEN)
 
-    
 
-    
 
-    
-    
 if __name__ == '__main__':
     run_discord_bot()
