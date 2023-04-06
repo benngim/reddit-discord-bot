@@ -2,16 +2,33 @@
 
 import praw
 import config
+import mangalist
 
 SUBREDDIT = "Manga"
 
 # Checks if post title matches correct format and is in manga list
 def valid_title(title):
-    pass
+    print(f"{title}\n")
+
+    split = title.upper().split(' ', 1)
+    if len(split) <= 1:
+        return False
+    first_word = split[0]
+    rest = split[1]
+
+    if first_word == "[DISC]":
+        post_title = rest.split(' -', 1)[0]
+        print(post_title)
+        for manga in mangalist.mangas:
+            if manga == post_title:
+                return True
+    
+    return False
 
 
 # Searches through all new posts in the subreddit
-def search_subreddit():
+async def search_subreddit(channel):
+    # Get reddit instance
     reddit = praw.Reddit(
         client_id=config.REDDIT_CLIENT_ID,
         client_secret=config.REDDIT_CLIENT_SECRET,
@@ -20,10 +37,13 @@ def search_subreddit():
         password="",
     )
 
+    print("running")
+    
     subreddit = reddit.subreddit(SUBREDDIT)
-    for submission in subreddit.stream.submissions():
+    for submission in subreddit.stream.submissions(skip_existing=True):
         # Check if post title is in manga list
-        if valid_title(submission.title.upper()) {
+        if valid_title(submission.title):
             # Post link in discord
+            print("Sending")
+            await channel.send(submission.url)
 
-        }

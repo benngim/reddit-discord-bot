@@ -1,6 +1,7 @@
 """Implementation of discord bot"""
 
 import discord
+import reddit
 import config
 
 
@@ -11,10 +12,15 @@ def run_discord_bot():
     client = discord.Client(intents=intents)
 
     @client.event
-    async def on_start():
+    async def on_ready():
         print(f"{client.user} is now running!!")
+        channel = client.get_channel(config.CHANNEL_ID)
+        await reddit.search_subreddit(channel)
 
     client.run(config.DISCORD_TOKEN)
+
+
+    
 
     
     
