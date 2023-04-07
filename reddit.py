@@ -11,7 +11,7 @@ SUBREDDIT = "Manga"
 
 # Checks if post title matches correct format ([DISC] Title - Ch.xx or [DISC] Title :: Ch.xx) and is in manga list
 def valid_title(title):
-    print(f"{title}\n")
+    print(f"New Post:\n{title}\n")
 
     split = title.upper().split(' ', 1)
     if len(split) <= 1:
@@ -21,7 +21,6 @@ def valid_title(title):
 
     if first_word == "[DISC]":
         post_title = rest.split(' -', 1)[0].split(' ::')[0]
-        print(post_title)
         if post_title in mangalist.mangas:
             return True
     
@@ -41,8 +40,6 @@ async def search_subreddit(channel):
         password="",
     )
 
-    print("running\n")
-
     # Load list of mangas
     mangalist.load_manga()
     
@@ -55,7 +52,7 @@ async def search_subreddit(channel):
                 # Check if post title is in manga list
                 if valid_title(submission.title):
                     # Post link in discord
-                    print("Sending\n")
+                    print("Valid Post, sending to channel\n")
                     await channel.send(f"https://www.reddit.com{submission.permalink}")
         except asyncprawcore.AsyncPrawcoreException:
             time.sleep(10)

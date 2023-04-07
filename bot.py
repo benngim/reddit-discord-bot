@@ -33,32 +33,41 @@ def run_discord_bot():
 
         # Add new manga to mangalist
         if message.content.startswith("!add"):
+            print("!add command activated\n")
             split = message.content.split(' ', 1)
             if len(split) <= 1:
+                print("Incorrect usage of add command\n")
                 await channel.send("``Manga title must be submitted when using this command!``")
                 return
             manga = split[1]
             added = reddit.mangalist.add_manga(manga)
             if added:
+                print(f"{manga.upper()} added to mangalist\n")
                 await channel.send(f"``{manga.upper()} has been successfully added to mangalist!``")
             else:
+                print(f"{manga.upper()} already in mangalist\n")
                 await channel.send(f"``{manga.upper()} is already in the mangalist!``")
 
         # Deletes new manga to mangalist
         elif message.content.startswith("!delete"):
+            print("!delete command activated\n")
             split = message.content.split(' ', 1)
             if len(split) <= 1:
+                print("Incorrect usage of delete command\n")
                 await channel.send("``Manga title must be submitted when using this command!``")
                 return
             manga = split[1]
             deleted = reddit.mangalist.delete_manga(manga)
             if deleted:
+                print(f"{manga.upper()} deleted from mangalist\n")
                 await channel.send(f"``{manga.upper()} has been successfully deleted from the mangalist!``")
             else:
+                print(f"{manga.upper()} already not in mangalist\n")
                 await channel.send(f"``{manga.upper()} is already not in mangalist!``")
 
         # Display help message
         elif message.content.startswith("!help"):
+            print("!help command activated\n")
             await channel.send(
                 "```COMMANDS:\n" 
                 + "!add [Manga] - Adds manga to bot's mangalist\n"
@@ -69,10 +78,12 @@ def run_discord_bot():
 
         # Display mangas in mangalist
         elif message.content.startswith("!mangalist"):
+            print("!mangalist command activated\n")
             await channel.send(f"```MANGALIST:\n{reddit.mangalist.get_mangalist()}```")
 
         # Command not found
         else:
+            print("Invalid command used\n")
             await channel.send("``Use !help for info on using this bot``")
             
 
