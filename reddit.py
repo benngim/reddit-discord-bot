@@ -3,7 +3,8 @@
 import time
 import asyncpraw
 import asyncprawcore
-import config
+import os
+from dotenv import load_dotenv
 import mangalist
 
 SUBREDDIT = "Manga"
@@ -29,10 +30,12 @@ def valid_title(title):
 
 # Searches through all new posts in the subreddit
 async def search_subreddit(channel):
+    load_dotenv()
+
     # Get reddit instance
     reddit = asyncpraw.Reddit(
-        client_id=config.REDDIT_CLIENT_ID,
-        client_secret=config.REDDIT_CLIENT_SECRET,
+        client_id=os.getenv("REDDIT_CLIENT_ID"),
+        client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
         user_agent="MangaBot",
         username="",
         password="",
