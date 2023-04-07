@@ -16,12 +16,12 @@ def run_discord_bot():
     @client.event
     async def on_ready():
         print(f"{client.user} is now running!!\n")
-        channel = client.get_channel(os.getenv("CHANNEL_ID"))
+        channel = client.get_channel(int(os.getenv("CHANNEL_ID")))
         await reddit.search_subreddit(channel)
 
     @client.event
     async def on_message(message):
-        channel = client.get_channel(os.getenv("CHANNEL_ID"))
+        channel = client.get_channel(int(os.getenv("CHANNEL_ID")))
 
         # Message is sent by bot
         if message.author == client.user:
