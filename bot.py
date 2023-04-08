@@ -31,12 +31,29 @@ def run_discord_bot():
         if message.channel != channel:
             return
 
-        # Add new manga to mangalist
-        if message.content.startswith("!add"):
-            print("!add command activated\n")
+        # Add new anime to animelist
+        if message.content.startswith("!add-a"):
+            print("!add anime command activated\n")
             split = message.content.split(' ', 1)
             if len(split) <= 1:
-                print("Incorrect usage of add command\n")
+                print("Incorrect usage of add anime command\n")
+                await channel.send("``Anime title must be submitted when using this command!``")
+                return
+            anime = split[1]
+            added = reddit.animelist.add_anime(anime)
+            if added:
+                print(f"{anime.upper()} added to animelist\n")
+                await channel.send(f"``{anime.upper()} has been successfully added to animelist!``")
+            else:
+                print(f"{anime.upper()} already in animelist\n")
+                await channel.send(f"``{anime.upper()} is already in the animelist!``")
+
+        # Add new manga to mangalist
+        elif message.content.startswith("!add-m"):
+            print("!add manga command activated\n")
+            split = message.content.split(' ', 1)
+            if len(split) <= 1:
+                print("Incorrect usage of add manga command\n")
                 await channel.send("``Manga title must be submitted when using this command!``")
                 return
             manga = split[1]
@@ -48,12 +65,34 @@ def run_discord_bot():
                 print(f"{manga.upper()} already in mangalist\n")
                 await channel.send(f"``{manga.upper()} is already in the mangalist!``")
 
-        # Deletes new manga to mangalist
-        elif message.content.startswith("!delete"):
-            print("!delete command activated\n")
+        # Display animes in animelist
+        elif message.content.startswith("!animelist"):
+            print("!animelist command activated\n")
+            await channel.send(f"```ANIMELIST:\n{reddit.animelist.get_animelist()}```")
+
+        # Deletes new anime from animelist
+        elif message.content.startswith("!delete-a"):
+            print("!delete anime command activated\n")
             split = message.content.split(' ', 1)
             if len(split) <= 1:
-                print("Incorrect usage of delete command\n")
+                print("Incorrect usage of delete anime command\n")
+                await channel.send("``Anime title must be submitted when using this command!``")
+                return
+            anime = split[1]
+            deleted = reddit.animelist.delete_anime(anime)
+            if deleted:
+                print(f"{anime.upper()} deleted from animelist\n")
+                await channel.send(f"``{anime.upper()} has been successfully deleted from the animelist!``")
+            else:
+                print(f"{anime.upper()} already not in animelist\n")
+                await channel.send(f"``{anime.upper()} is already not in animelist!``")
+
+        # Deletes new manga from mangalist
+        elif message.content.startswith("!delete-m"):
+            print("!delete manga command activated\n")
+            split = message.content.split(' ', 1)
+            if len(split) <= 1:
+                print("Incorrect usage of delete manga command\n")
                 await channel.send("``Manga title must be submitted when using this command!``")
                 return
             manga = split[1]
@@ -70,8 +109,11 @@ def run_discord_bot():
             print("!help command activated\n")
             await channel.send(
                 "```COMMANDS:\n" 
-                + "!add [Manga] - Adds manga to bot's mangalist\n"
-                + "!delete [Manga] - Deletes manga from bot's mangalist\n"
+                + "!add-a [Anime] - Adds anime to bot's animelist\n"
+                + "!add-m [Manga] - Adds manga to bot's mangalist\n"
+                + "!animelist - Displays all anime in bot's animelist\n"
+                + "!delete-a [Anime] - Deletes anime from bot's animelist\n"
+                + "!delete-m [Manga] - Deletes manga from bot's mangalist\n"
                 + "!help - Displays usage for bot commands\n"
                 + "!mangalist - Displays all manga in bot's mangalist```"
                 )

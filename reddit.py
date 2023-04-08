@@ -6,12 +6,14 @@ import asyncprawcore
 import os
 from dotenv import load_dotenv
 import mangalist
+import animelist
 
-SUBREDDIT = "Manga"
+SUBREDDIT1 = "Manga"
+SUBREDDIT2 = "Anime"
 
-# Checks if post title matches correct format ([DISC] Title - Ch.xx or [DISC] Title :: Ch.xx) and is in manga list
-def valid_title(title):
-    print(f"New Post:\n{title}\n")
+# Checks if post title matches correct format for manga subreddit and is in manga list
+def valid_manga_title(title):
+    print(f"New Post (Manga):\n{title}\n")
 
     split = title.upper().split(' ', 1)
     if len(split) <= 1:
@@ -20,8 +22,19 @@ def valid_title(title):
     rest = split[1]
 
     if first_word == "[DISC]":
-        post_title = rest.split(' -', 1)[0].split(' ::')[0]
+        post_title = rest.split(' -', 1)[0].split(' ::')[0].split(' (Ch')[0].split(' Ch.')[0]
         if post_title in mangalist.mangas:
+            return True
+    
+    return False
+
+# Checks if post title matches correct format for anime subreddit and is in anime list
+def valid_anime_title(title):
+    print(f"New Post (Anime):\n{title}\n")
+
+    post_titles = title.upper().split(' -', 1)[0].split(' • ', 1)
+    for post_title in post_titles:
+        if post_title in animelist.animes:
             return True
     
     return False
@@ -42,18 +55,30 @@ async def search_subreddit(channel):
 
     # Load list of mangas
     mangalist.load_manga()
+
+    # Load list of animes
+    animelist.load_anime()
     
     # Get stream of new posts from subreddit
-    subreddit = await reddit.subreddit(SUBREDDIT)
+    subreddit = await reddit.subreddit(f"{SUBREDDIT1}+{SUBREDDIT2}")
     searching = True
     while searching:
         try:
             async for submission in subreddit.stream.submissions(skip_existing=True):
-                # Check if post title is in manga list
-                if valid_title(submission.title):
-                    # Post link in discord
-                    print("Valid Post, sending to channel\n")
-                    await channel.send(f"https://www.reddit.com{submission.permalink}")
+                # Post is from manga subreddit
+                if submission.subreddit.name == SUBREDDIT1:
+                    # Check if post title is in manga list
+                    if valid_manga_title(submission.title):
+                        # Post link in discord
+                        print("Valid Post, sending to channel\n")
+                        await channel.send(f"https://www.reddit.com{submission.permalink}")
+                # Post is from anime subreddit
+                else:
+                    # Check if post title is in anime list
+                    if valid_anime_title(submission.title):
+                        # Post link in discord
+                        print("Valid Post, sending to channel\n")
+                        await channel.send(f"https://www.reddit.com{submission.permalink}")
         except asyncprawcore.AsyncPrawcoreException:
             time.sleep(10)
 
