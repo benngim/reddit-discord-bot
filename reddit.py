@@ -66,7 +66,7 @@ async def search_subreddit(channel):
         try:
             async for submission in subreddit.stream.submissions(skip_existing=True):
                 # Post is from manga subreddit
-                if submission.subreddit.name == SUBREDDIT1:
+                if submission.subreddit.display_name == SUBREDDIT1:
                     # Check if post title is in manga list
                     if valid_manga_title(submission.title):
                         # Post link in discord
