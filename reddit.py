@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 import mangalist
 import animelist
 
-SUBREDDIT1 = "Manga"
-SUBREDDIT2 = "Anime"
+SUBREDDIT1 = "manga"
+SUBREDDIT2 = "anime"
 
 # Checks if post title matches correct format for manga subreddit and is in manga list
 def valid_manga_title(title):
