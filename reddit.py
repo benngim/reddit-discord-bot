@@ -22,7 +22,7 @@ def valid_manga_title(title):
     rest = split[1]
 
     if first_word == "[DISC]":
-        post_title = rest.split(' -', 1)[0].split(' ::')[0].split(' (Ch')[0].split(' Ch.')[0]
+        post_title = rest.split(' -', 1)[0].split(' ::')[0].split(' (CH')[0].split(' CH.')[0]
         if post_title in mangalist.mangas:
             return True
     
